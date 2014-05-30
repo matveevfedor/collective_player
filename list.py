@@ -8,7 +8,7 @@ def list_tracks():
 	response = client.lsinfo()
 	client.close()
 	client.disconnect()
-	return json.dumps(response, indent=4,separators=(',',':'))	
+	return json.dumps(response)	
 	
 
 

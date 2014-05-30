@@ -1,15 +1,25 @@
-from bottle import run, route, post, template, request
+
+from bottle import run, route, post, template, request, BaseResponse
 from list import list_tracks
 from search import find_track
 from queue_update import update_queue
+from info import get_info
+from play import play_queue
 
+_current_queue = []
 @route('/queue')
 def get_queue():
-	return update_queue().replace('\n','<br/>')
+	global _current_queue
+	new_queue = update_queue(_current_queue)
+	if new_queue == _current_queue:
+		return BaseResponse(status_code=304)
+	else:
+		_current_queue = new_queue
+		return _current_queue
 
 @route('/tracks/all')
 def get_tracks():
-	r = list_tracks().replace('\n','<br/>')
+	r = list_tracks()
 	return  r
 
 @post('/queue/add')
@@ -22,8 +32,13 @@ def find():
 	what = request.query.what
 	return find_track(mode, what)
 
-@route('/tracks/<pos>')
+@route('/queue/<pos>')
 def info(pos):
-	return pos
+	return get_info(pos)
+@route('/queue/play/')
+def play():
+	play_queue()
+	return 'playing'
+
 
 run(host='0.0.0.0', port=8080, debug='false')
