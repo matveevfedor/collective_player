@@ -1,10 +1,17 @@
+# -*- coding: utf-8 -*-
+#Collective_player_server
+#Модуль запуска воспроизведения очереди
 from mpd import MPDClient
-
+import json
+#Функция play_queue - осуществляет запуск очереди воспроизведения
+#возвращаемое значение result - успех/неудача
 def play_queue():
 	client = MPDClient()
 	client.connect("localhost", 6600)
-	response = client.play(1)
-	response = client.delete(0)
+	try:
+		result = json.dumps(client.play(0))
+	except:	
+		result = False	
 	client.close()
 	client.disconnect()
-	return True
+	return result
