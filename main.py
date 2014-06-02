@@ -26,6 +26,7 @@ def get_queue():
 		else:
 			_current_queue = new_queue
 			updating = datetime.datetime.utcnow().ctime()
+			response.set_header('Access-Control-Allow-Origin','*')
 			response.set_header('Content-type', 'application/json')
 			response.set_header('Last-Modified', updating)
 			return _current_queue
@@ -35,6 +36,7 @@ def get_queue():
 @route('/tracks/all')
 def get_tracks():
 	response.set_header('Content-type','application/json')
+	response.set_header('Access-Control-Allow-Origin','*')
 	result = list_tracks()
 	if result:
 		return result
@@ -58,6 +60,7 @@ def add():
 def find():
 	mode = request.query.mode
 	what = request.query.what
+	response.set_header('Access-Control-Allow-Origin','*')
 	response.set_header('Content-type', 'application/json')
 	result = find_track(mode, what)
 	if result:
@@ -72,6 +75,7 @@ def find():
 @route('/queue/<pos>')
 def info(pos):
 	result = get_info(pos)
+	response.set_header('Access-Control-Allow-Origin','*')
 	response.set_header('Content-type', 'application/json')
 	if result:
 		return get_info(pos)
