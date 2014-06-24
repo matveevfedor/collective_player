@@ -49,7 +49,9 @@ def add():
 	name = request.forms.get('name')
 	result =  add_track(name)
 	if result:
-		return get_queue()
+		response.set_header('Access-Control-Allow-Origin','*')
+                response.set_header('Content-type', 'application/json')
+              	return update_queue()
 	else:
 		return HTTPResponse(status=500)
 #Обработка GET-запроса от клиента на осуществление поиска по трекам
